@@ -16,7 +16,9 @@ try:
     if not os.access(file_path, os.R_OK):
         raise PermissionError("Cannot read the Excel file.")
     
-    df = pd.read_excel(file_path)
+    # Load the specific sheet into a DataFrame
+    df = pd.read_excel(file_path, sheet_name='Sheet1')  # Adjust 'Sheet1' to your sheet name
+    
 except FileNotFoundError as fnf_error:
     print(fnf_error)
     exit()  # Exit the script if the file is not found
@@ -28,20 +30,44 @@ except Exception as e:
     exit()
 
 # Data Processing
+# Check if the 'User Inputs' column exists and process the data
 try:
-    # Assuming the DataFrame has columns like 'Location', 'EnergyRequirement'
-    df.dropna(subset=['Field'], inplace=True)
+    if 'User Inputs' not in df.columns:
+        raise KeyError("Column 'User Inputs' not found in the data.")
+    
+    # Split 'User Inputs' column by ':' delimiter
+    user_inputs_split = df['User Inputs'].str.split(':', expand=True)
+    
+    # Check if exactly 2 columns are produced after splitting
+    if user_inputs_split.shape[1] != 2:
+        raise ValueError("Expected 2 columns after splitting 'User Inputs'.")
+    
+    # Assign split columns to DataFrame
+    df[['Field', 'Inputs']] = user_inputs_split
+    
+    # Drop the original 'User Inputs' column
+    df.drop(columns=['User Inputs'], inplace=True)
+    
+    # Assuming the DataFrame now has columns like 'Field', 'Inputs', ...
+    # Check if the length of 'Field' and 'Inputs' columns are equal
+    if len(df['Field']) != len(df['Inputs']):
+        raise ValueError("Length mismatch between 'Field' and 'Inputs' columns.")
+    
 except KeyError as ke:
     print(f"Column missing in the data: {ke}")
+    exit()
+except ValueError as ve:
+    print(f"Value error in data processing: {ve}")
     exit()
 except Exception as e:
     print(f"An error occurred during data processing: {e}")
     exit()
 
+
 # Use AI techniques to recommend green energy technologies based on the inputs
 try:
     kmeans = KMeans(n_clusters=3)
-    df['Cluster'] = kmeans.fit_predict(df[['EnergyRequirement']].values)
+    df['Cluster'] = kmeans.fit_predict(df[['Field']].values)
 except NotFittedError as nfe:
     print(f"Model fitting error: {nfe}")
     exit()
