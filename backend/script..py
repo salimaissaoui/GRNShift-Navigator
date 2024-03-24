@@ -3,18 +3,26 @@ import googlemaps
 from sklearn.cluster import KMeans
 from sklearn.exceptions import NotFittedError
 import os
+from googlemaps.geocoding import geocode
 
 # Load the data from the Excel file
 try:
     # Check if the file exists
-    file_path = r"C:\Users\Salim\Downloads\GRNShift bot\backend\Sustainable Technologies Sample Database.xlsx"
+    file_path = r"C:\Users\salim\Downloads\GRNShift-Navigator\backend\Data\Sustainble Technologies Sample Database.xlsx"
     if not os.path.exists(file_path):
         raise FileNotFoundError("Excel file not found.")
-
+    
+    # Check if the file is readable
+    if not os.access(file_path, os.R_OK):
+        raise PermissionError("Cannot read the Excel file.")
+    
     df = pd.read_excel(file_path)
 except FileNotFoundError as fnf_error:
     print(fnf_error)
     exit()  # Exit the script if the file is not found
+except PermissionError as perm_error:
+    print(perm_error)
+    exit()  # Exit the script if file permissions prevent reading
 except Exception as e:
     print(f"An error occurred while loading the Excel file: {e}")
     exit()
@@ -22,7 +30,7 @@ except Exception as e:
 # Data Processing
 try:
     # Assuming the DataFrame has columns like 'Location', 'EnergyRequirement'
-    df.dropna(subset=['Location', 'EnergyRequirement'], inplace=True)
+    df.dropna(subset=['Field'], inplace=True)
 except KeyError as ke:
     print(f"Column missing in the data: {ke}")
     exit()
@@ -58,8 +66,7 @@ gmaps = googlemaps.Client(key='YOUR_GOOGLE_MAPS_API_KEY')
 # Function to fetch latitude and longitude for a given location using Google Maps
 def get_lat_lng(location):
     try:
-        geocode_result = gmaps.geocode(location)
-        if geocode_result:
+        if geocode_result := geocode(gmaps, location):
             lat = geocode_result[0]['geometry']['location']['lat']
             lng = geocode_result[0]['geometry']['location']['lng']
             return lat, lng
@@ -81,5 +88,3 @@ for index, row in df.iterrows():
         print("-" * 50)
     else:
         print(f"Location: {row['Location']} - Could not retrieve coordinates.")
-
-# Note: This code includes basic error handling. Depending on your requirements, you might need more sophisticated error management.
