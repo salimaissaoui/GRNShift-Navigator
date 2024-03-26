@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Energy Technology Recommender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" style="display: block; margin: 0 auto; max-width: 200px;">
+        <h1>GRNShift Navigator</h1>
+        <form action="/recommend" method="post">
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required><br>
+            
+            <label for="property_type">Property Type:</label>
+            <input type="text" id="property_type" name="property_type" required><br>
+            
+            <label for="current_energy_usage">Current Annual Energy Usage (kWh):</label>
+            <input type="number" id="current_energy_usage" name="current_energy_usage" required><br>
+            
+            <label for="current_energy_cost">Current Annual Energy Cost (CAD):</label>
+            <input type="number" id="current_energy_cost" name="current_energy_cost" required><br>
+            
+            <label for="energy_reduction_goal">Energy Reduction Goal (%):</label>
+            <input type="number" id="energy_reduction_goal" name="energy_reduction_goal" required><br>
+            
+            <input type="submit" value="Get Recommendations">
+        </form>
+    </div>
+</body>
+</html>

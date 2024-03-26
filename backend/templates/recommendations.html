@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Technologies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            animation: fadeIn 0.5s ease-in-out, fadeInEnd 0.5s ease-in-out forwards;
+            opacity: 0;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* CSS animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Apply opacity 1 after animation */
+        @keyframes fadeInEnd {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" style="display: block; margin: 0 auto; max-width: 200px;">
+        <h1>Recommended Green Energy Technologies</h1>
+        <table>
+            <tr>
+                <th>Technology</th>
+                <th>Manufacturer</th>
+                <th>Cost of Product (CAD)</th>
+                <th>Energy Savings (%)</th>
+                <th>Cost Savings (CAD/Year)</th>
+                <th>Specifications</th>
+                <th>Lifespan (Years)</th>
+                <th>Installation Cost (CAD)</th>
+                <th>Ideal Property Types</th>
+                <th>ROI Timeframe (Years)</th>
+                <th>Installation Partner</th>
+            </tr>
+            {% for index, row in recommendations.iterrows() %}
+            <tr>
+                <td>{{ row['Technology'] }}</td>
+                <td>{{ row['Manufacturer'] }}</td>
+                <td>{{ row['Cost of Product (CAD)'] }}</td>
+                <td>{{ row['Energy Savings (%) -relative to baseline.'] }}</td>
+                <td>{{ row['Cost Savings (CAD/Year)'] }}</td>
+                <td>{{ row['Specifications'] }}</td>
+                <td>{{ row['Lifespan (Years)'] }}</td>
+                <td>{{ row['Installation Cost (CAD)'] }}</td>
+                <td>{{ row['Ideal Property Types'] }}</td>
+                <td>{{ row['ROI Timeframe (Years)'] }}</td>
+                <td>{{ row['Installation Partner'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
