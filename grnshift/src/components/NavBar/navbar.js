@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { SidebarData } from './sidebardata';
 import './navbar.css';
 import { IconContext } from 'react-icons';
+import logo from '../../assets/GRNSFHIT.png';
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
@@ -18,6 +19,7 @@ function Navbar() {
           <Link to='#' className='menu-bars'>
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
+          <img src={logo} alt="Logo" className='navbar-logo' />  {/* Add the logo */}
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
           <ul className='nav-menu-items' onClick={showSidebar}>

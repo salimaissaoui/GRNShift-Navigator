@@ -108,7 +108,7 @@ body {
 }
 
 .next-button {
-    background: linear-gradient(to right, #005803, #0d3a00 ); /* Gradient background */
+    background: linear-gradient(to right, #0d3a00, #082500 ); /* Gradient background */
     color: white;
     border: none;
     padding: 20px 40px; /* Increased padding */
@@ -121,5 +121,5 @@ body {
 }
 
 .next-button:hover {
-    background: linear-gradient(to right, #0d3a00, #082500 ); /* Reverse gradient on hover */
+    background: #1a83ff /* Reverse gradient on hover */
 }
