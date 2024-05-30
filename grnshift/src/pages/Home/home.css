@@ -1,34 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Bank+Gothic&family=Calibri:wght@400;700&display=swap');
+
+body {
+    font-family: 'Calibri', sans-serif; /* Default font for the rest of the text */
+    font-size: 18px; /* Increased font size */
+}
+
 .container {
     width: 60%;
     margin: auto;
+    margin-top: 75px;
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    text-align: center; /* Center inline-block elements */
 }
 
 .header {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    background: #113E21; /* Dark green background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding around the text */
+    border-radius: 25px; /* Rounded corners */
+    border: 2px solid #00ff00; /* Bright green border */
+    font-size: 28px; /* Font size */
+    display: inline-block; /* Make the border wrap only around the text */
+    margin-bottom: 28px; /* Space below the header */
+    font-family: 'Bank Gothic', sans-serif; /* Bank Gothic font */
 }
 
 .sub-header {
     text-align: center;
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: 30px; /* Increased font size */
+    margin-bottom: 30px; /* Increased margin */
+    font-family: 'Bank Gothic', sans-serif; /* Bank Gothic font */
 }
 
 .tab-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* Increased margin */
 }
 
 .tab {
-    margin: 0 10px;
-    padding: 10px;
+    margin: 0 15px; /* Increased margin */
+    padding: 15px; /* Increased padding */
+    font-size: 20px; /* Increased font size */
     border-bottom: 2px solid transparent;
     cursor: pointer;
 }
@@ -39,39 +56,70 @@
 
 .form {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
 }
 
 .form-group {
     display: flex;
-    justify-content: space-between;
-    width: 80%;
-    margin-bottom: 15px;
+    flex-direction: column;
+    width: 45%;
+    margin-bottom: 30px; /* Increased margin */
 }
 
-.label {
-    font-weight: bold;
-    width: 30%;
+.input-container {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(90deg, #113E21, #0e311a); /* Gradient background */
+    border-radius: 5px;
+    padding: 15px; /* Increased padding */
+    margin-top: 10px; /* Increased margin */
+    border: 1px solid transparent;
+}
+
+.input-container img {
+    margin-right: 15px; /* Increased margin */
+    width: 25px; /* Increased size */
+    height: 25px; /* Increased size */
+    filter: invert(1); /* Invert the color to white */
 }
 
 .input {
-    background-color: #f0f0f0;
-    padding: 10px;
+    width: 100%;
+    border: none;
+    background: linear-gradient(90deg, #113E21, #0e311a); /* Gradient background */
+    padding: 15px; /* Increased padding */
+    color: #fff;
     border-radius: 5px;
-    width: 65%;
-    text-align: center;
+    outline: none;
+    font-size: 18px; /* Increased font size */
+}
+
+.input:focus {
+    background: linear-gradient(90deg, #113E21, #0e311a); /* Gradient background */
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .next-button {
-    background-color: #00cc00;
+    background: linear-gradient(to right, #0d3a00, #082500 ); /* Gradient background */
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 20px 40px; /* Increased padding */
     border-radius: 5px;
     cursor: pointer;
+    font-size: 22px; /* Increased font size */
+    margin-top: 30px; /* Increased margin */
+    align-self: center;
+    transition: background 0.3s ease;
 }
 
 .next-button:hover {
-    background-color: #009900;
+    background: #1a83ff /* Reverse gradient on hover */
 }
