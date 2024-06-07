@@ -1,55 +1,51 @@
 import pandas as pd
+import psycopg2
+from sqlalchemy import create_engine
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Load and clean the data from the uploaded CSV file
-file_path = r'C:\Users\Salim\Downloads\GRNShift-Navigator\backend\Data\Sustainable Technology Database - Sustainble Technologies.csv'
-sustainable_tech_df = pd.read_csv(file_path)
+# Function to connect to PostgreSQL and fetch data
+def fetch_data_from_postgres():
+    dbname = 'postgres'
+    user = 'postgres'
+    password = 'Green'
+    host = 'localhost'
+    port = '5432'  # Default is 5432
+
+    try:
+        # Create an engine instance
+        engine = create_engine(f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{dbname}')
+        
+        # SQL query to fetch data
+        query = "SELECT * FROM sustainable_technology"
+        
+        # Read data from PostgreSQL
+        data = pd.read_sql_query(query, engine)
+        
+        return data
+    except Exception as e:
+        print(f"Error connecting to PostgreSQL database: {e}")
+        raise
 
 # Function to clean and structure the data
-def clean_and_structure_data(df):
-    structured_data = []
-    current_tech = None
-    start_row = None
+def clean_and_structure_postgres_data(df):
+    df.columns = df.columns.str.lower().str.replace(' ', '_')
+    df['technology'] = df['brand']
+    df['cost_of_product_(cad)'] = df['unit_price']
+    df['energy_savings_(%)-relative_to_baseline.'] = 0
+    df['cost_savings_(cad/year)'] = 0
+    df['specifications'] = df.apply(lambda row: ", ".join([str(row['cell_configuration']), str(row['rated_power']), str(row['weight']), str(row['height']), str(row['width'])]), axis=1)
+    df['lifespan_(years)'] = 0
+    df['installation_cost_(cad)'] = 0
+    df['ideal_property_types'] = "Not specified"
+    df['roi_timeframe_(years)'] = "TBD"
 
-    for i, row in df.iterrows():
-        if pd.notna(row.iloc[0]) and row.iloc[0].isupper():
-            if current_tech and start_row is not None:
-                structured_data.extend(extract_and_structure_data(df, current_tech, start_row, i))
-            current_tech = row.iloc[0]
-            start_row = i + 1
-
-    if current_tech and start_row is not None:
-        structured_data.extend(extract_and_structure_data(df, current_tech, start_row, len(df)))
-
-    return pd.DataFrame(structured_data)
-
-# Function to extract and structure the data
-def extract_and_structure_data(df, technology_name, start_row, end_row):
-    structured_data = []
-    for i in range(start_row, end_row):
-        row = df.iloc[i]
-        specifications = [str(row.iloc[8]), str(row.iloc[9]), str(row.iloc[12]), str(row.iloc[13]), str(row.iloc[14])]
-        specifications = [spec for spec in specifications if spec != 'nan']
-        structured_data.append({
-            "Technology": technology_name,
-            "Cost of Product (CAD)": row.iloc[4] if pd.notna(row.iloc[4]) else 0,
-            "Manufacturer": row.iloc[0] if pd.notna(row.iloc[0]) else "Unknown",
-            "Energy Savings (%) -relative to baseline.": 0,
-            "Cost Savings (CAD/Year)": 0,
-            "Specifications": ", ".join(specifications),
-            "Lifespan (Years)": 0,
-            "Installation Cost (CAD)": 0,
-            "Ideal Property Types": "Not specified",
-            "ROI Timeframe (Years)": "TBD"
-        })
-    return structured_data
-
-# Clean the data
-cleaned_technology_df = clean_and_structure_data(sustainable_tech_df)
+    cleaned_df = df[['technology', 'brand', 'cost_of_product_(cad)', 'energy_savings_(%)-relative_to_baseline.', 'cost_savings_(cad/year)', 'specifications', 'lifespan_(years)', 'installation_cost_(cad)', 'ideal_property_types', 'roi_timeframe_(years)']]
+    cleaned_df.columns = ['Technology', 'Manufacturer', 'Cost of Product (CAD)', 'Energy Savings (%) -relative to baseline.', 'Cost Savings (CAD/Year)', 'Specifications', 'Lifespan (Years)', 'Installation Cost (CAD)', 'Ideal Property Types', 'ROI Timeframe (Years)']
+    return cleaned_df
 
 def recommend_technologies_ai(location, property_type, current_energy_usage, current_energy_cost, energy_reduction_goal):
-    technology_df = cleaned_technology_df.copy()
+    technology_df = clean_and_structure_postgres_data(fetch_data_from_postgres())
     technology_df['features'] = technology_df[['Cost of Product (CAD)', 'Energy Savings (%) -relative to baseline.',
                                                'Cost Savings (CAD/Year)', 'Lifespan (Years)', 
                                                'Installation Cost (CAD)']].astype(str).apply(lambda x: ' '.join(x), axis=1)
