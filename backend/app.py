@@ -1,8 +1,11 @@
+from flask import Flask, request, jsonify
 import pandas as pd
 import psycopg2
 from sqlalchemy import create_engine
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+app = Flask(__name__)
 
 # Function to connect to PostgreSQL and fetch data
 def fetch_data_from_postgres():
@@ -80,13 +83,19 @@ def recommend_technologies_ai(location, property_type, current_energy_usage, cur
                                 'Specifications', 'Lifespan (Years)', 'Installation Cost (CAD)', 
                                 'Ideal Property Types', 'ROI Timeframe (Years)', 'Installation Partner']]
 
-# Example usage with user inputs
-if __name__ == '__main__':
-    location = input("Enter your location (e.g., ON): ")
-    property_type = input("Enter your property type (e.g., Detached, Semi-detached, Apartment): ")
-    current_energy_usage = float(input("Enter your current annual energy usage (in kWh): "))
-    current_energy_cost = float(input("Enter your current annual energy cost (in CAD): "))
-    energy_reduction_goal = float(input("Enter your energy reduction goal (in %): "))
-
+@app.route('/api/recommend', methods=['POST'])
+def recommend():
+    data = request.get_json()
+    location = data.get('location')
+    property_type = data.get('property_type')
+    current_energy_usage = data.get('current_energy_usage')
+    current_energy_cost = data.get('current_energy_cost')
+    energy_reduction_goal = data.get('energy_reduction_goal')
+    
     recommendations = recommend_technologies_ai(location, property_type, current_energy_usage, current_energy_cost, energy_reduction_goal)
-    print(recommendations)
+    recommendations_json = recommendations.to_json(orient='records')
+    
+    return jsonify(recommendations_json)
+
+if __name__ == '__main__':
+    app.run(debug=True)
