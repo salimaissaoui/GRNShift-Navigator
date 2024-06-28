@@ -15,8 +15,8 @@ print("First few rows of the data:\n", data.head())
 # Step 2: Connect to PostgreSQL
 dbname = 'postgres'
 user = 'postgres'
-password = 'Green'
-host = 'localhost'
+password = 'Grnshift'
+host = 'database-2.ctwgq2kqgrl6.us-east-2.rds.amazonaws.com'
 port = '5432'  # Default is 5432
 
 conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)

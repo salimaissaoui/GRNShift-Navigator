@@ -11,8 +11,8 @@ app = Flask(__name__)
 def fetch_data_from_postgres():
     dbname = 'postgres'
     user = 'postgres'
-    password = 'Green'
-    host = 'localhost'
+    password = 'Grnshift'
+    host = 'database-2.ctwgq2kqgrl6.us-east-2.rds.amazonaws.com'
     port = '5432'  # Default is 5432
 
     try:
