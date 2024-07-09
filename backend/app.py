@@ -4,8 +4,10 @@ import psycopg2
 from sqlalchemy import create_engine
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 # Function to connect to PostgreSQL and fetch data
 def fetch_data_from_postgres():

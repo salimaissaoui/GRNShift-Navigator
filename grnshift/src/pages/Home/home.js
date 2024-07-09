@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './home.css';
 import location_icon from '../../assets/address_icon.png';
@@ -14,10 +15,17 @@ function Home() {
     const [currentEnergyCost, setCurrentEnergyCost] = useState('');
     const [energyReductionGoal, setEnergyReductionGoal] = useState('');
     const [recommendations, setRecommendations] = useState([]);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async () => {
+        if (!location || !propertyType || !currentEnergyUsage || !currentEnergyCost || !energyReductionGoal) {
+            setError('All fields must be filled in');
+            return;
+        }
+        
         try {
-            const response = await axios.post('/api/recommend', {
+            const response = await axios.post('http://127.0.0.1:5000/api/recommend', {
                 location,
                 property_type: propertyType,
                 current_energy_usage: currentEnergyUsage,
@@ -25,11 +33,14 @@ function Home() {
                 energy_reduction_goal: energyReductionGoal,
             });
             setRecommendations(JSON.parse(response.data));
+            setError('');
+            navigate('/results');  // Navigate to the results page
         } catch (error) {
             console.error("There was an error making the request:", error);
+            setError('There was an error processing your request');
         }
     };
-
+    
     return (
         <div className="container">
             <div className="header">Energy Profile</div>
@@ -73,6 +84,7 @@ function Home() {
                         <input className="input" type="number" value={energyReductionGoal} onChange={e => setEnergyReductionGoal(e.target.value)} />
                     </div>
                 </div>
+                {error && <div className="error">{error}</div>}
                 <div className="button-container">
                     <button className="next-button" onClick={handleSubmit}>Next</button>
                 </div>
