@@ -123,3 +123,31 @@ body {
 .next-button:hover {
     background: #1a83ff /* Reverse gradient on hover */
 }
+
+.recommendations {
+    margin-top: 30px;
+}
+
+.recommendations h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.recommendations table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.recommendations table, th, td {
+    border: 1px solid #ccc;
+}
+
+.recommendations th, .recommendations td {
+    padding: 10px;
+    text-align: left;
+}
+
+.recommendations th {
+    background-color: #f4f4f4;
+}
